@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.brand-name {
+  margin-right: 0; /* Moves ResumeX to the left */
+  font-size: 1.2em; /* Optional: Adjust font size if needed */
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  justify-content: flex-start;
+}
+.navbar{
+  display: flex;
+  justify-content: flex-start;
+}
+
+.navbar-list{
+  display: flex;
+  justify-content: flex-start;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+.navbar-list li {
+  margin-right: 20px;
+}

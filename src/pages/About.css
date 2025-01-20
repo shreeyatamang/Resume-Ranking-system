@@ -1,0 +1,83 @@
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  background: linear-gradient(180deg, #f4f7fc, #e2ecf5);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.about-box, .mission-box {
+  text-align: center;
+  margin: 20px 0;
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.box-title {
+  font-size: 2rem;
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.about-content, .mission-content {
+  text-align: justify;
+  margin: 20px 0;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 1s ease both;
+}
+
+.about-content p, .mission-content p {
+  margin: 10px 0;
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.about-container p {
+  color: #555;
+  font-weight: 400;
+}
+
+.about-box:hover, .mission-box:hover {
+  transform: translateY(-5px);
+  background: linear-gradient(45deg, #4a89f5, #6a11cb);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .about-box, .mission-box, .about-content, .mission-content {
+    margin: 15px 0;
+    padding: 15px;
+  }
+
+  .box-title {
+    font-size: 1.5rem;
+  }
+
+  .about-content p, .mission-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
