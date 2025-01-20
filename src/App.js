@@ -9,7 +9,7 @@ import "./App.css"; // Import your CSS file
 import CandidateDashboard from './pages/CandidateDashboard';  // Candidate dashboard
 import CandidateLogin from './pages/CandidateLogin';  // Candidate login page
 import HRLogin from './pages/HRLogin'; // HR login page
-import HRDashboard from './pages/HRDashboard';     //HR dashboard page
+import HRDashboard from './pages/HRDashboard';//HR dashboard page
 import Home from "./pages/Home";  // Home page
 import About from "./pages/About";  // About page
 import Contact from "./pages/Contact";  // Contact page

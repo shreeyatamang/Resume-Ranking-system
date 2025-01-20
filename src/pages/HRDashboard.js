@@ -1,116 +1,106 @@
-// HRDashboard.js
-import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './HRDashboard.css';  // Import the custom CSS file
+import React, { useState, useEffect } from "react";
+import "./HRDashboard.css";
+
 
 function HRDashboard() {
-  const [jobTitle, setJobTitle] = useState('');
-  const [jobDescription, setJobDescription] = useState('');
-  const [jobFile, setJobFile] = useState(null);
-  const [resumes, setResumes] = useState([
-    { id: 1, jobTitle: 'Software Engineer', applicantName: 'John Doe', resumeLink: '#1' },
-    { id: 2, jobTitle: 'Data Scientist', applicantName: 'Jane Smith', resumeLink: '#2' },
-  ]);
+  const [jobs, setJobs] = useState([]);
+  const [newJob, setNewJob] = useState({
+    title: "",
+    company: "",
+    description: "",
+    image: null,
+  });
 
-  const handleJobTitleChange = (e) => setJobTitle(e.target.value);
-  const handleJobDescriptionChange = (e) => setJobDescription(e.target.value);
-  const handleJobFileChange = (e) => setJobFile(e.target.files[0]);
+  useEffect(() => {
+    // Load jobs from localStorage
+    const savedJobs = JSON.parse(localStorage.getItem("jobs")) || [];
+    setJobs(savedJobs);
+  }, []);
 
-  const handleJobSubmit = (e) => {
-    e.preventDefault();
-    // Handle job submission (e.g., save job vacancy to the backend)
-    console.log('Job Vacancy Uploaded:', { jobTitle, jobDescription, jobFile });
-    alert('Job vacancy uploaded!');
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewJob({ ...newJob, [name]: value });
   };
 
-  const handleResumeDelete = (id) => {
-    setResumes(resumes.filter((resume) => resume.id !== id));
+  const handleFileChange = (e) => {
+    setNewJob({ ...newJob, image: e.target.files[0] });
+  };
+
+  const handleAddJob = () => {
+    if (!newJob.title || !newJob.company || !newJob.description || !newJob.image) {
+      alert("Please fill in all fields and upload an image!");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const updatedJobs = [
+        ...jobs,
+        { ...newJob, id: Date.now(), image: reader.result }, // Convert image to Base64
+      ];
+      setJobs(updatedJobs);
+      localStorage.setItem("jobs", JSON.stringify(updatedJobs));
+      setNewJob({ title: "", company: "", description: "", image: null });
+    };
+    reader.readAsDataURL(newJob.image); // Read image as Base64
+  };
+
+  const handleRemoveJob = (jobId) => {
+    const updatedJobs = jobs.filter((job) => job.id !== jobId);
+    setJobs(updatedJobs);
+    localStorage.setItem("jobs", JSON.stringify(updatedJobs));
   };
 
   return (
-    <div className="container mt-4">
+    <div className="hr-dashboard-container">
       <h1>HR Dashboard</h1>
-
-      {/* Job Vacancy Upload Form */}
-      <div className="card mt-4">
-        <div className="card-header">Upload Job Vacancy</div>
-        <div className="card-body">
-          <form onSubmit={handleJobSubmit}>
-            <div className="mb-3">
-              <label htmlFor="jobTitle" className="form-label">Job Title</label>
-              <input
-                type="text"
-                className="form-control"
-                id="jobTitle"
-                value={jobTitle}
-                onChange={handleJobTitleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="jobDescription" className="form-label">Job Description</label>
-              <textarea
-                className="form-control"
-                id="jobDescription"
-                value={jobDescription}
-                onChange={handleJobDescriptionChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="jobFile" className="form-label">Job Posting File (Optional)</label>
-              <input
-                type="file"
-                className="form-control"
-                id="jobFile"
-                onChange={handleJobFileChange}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Upload Job Vacancy
-            </button>
-          </form>
-        </div>
+      <div className="add-job-form">
+        <h2>Add New Job</h2>
+        <input
+          type="text"
+          name="title"
+          placeholder="Job Title"
+          value={newJob.title}
+          onChange={handleInputChange}
+          className="small-input"
+        />
+        <input
+          type="text"
+          name="company"
+          placeholder="Company Name"
+          value={newJob.company}
+          onChange={handleInputChange}
+          className="small-input"
+        />
+        <textarea
+          name="description"
+          placeholder="Job Description"
+          value={newJob.description}
+          onChange={handleInputChange}
+          className="large-input"
+        />
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <button onClick={handleAddJob}>Add Job</button>
       </div>
-
-      {/* Resumes Table */}
-      <div className="card mt-5">
-        <div className="card-header">Uploaded Resumes</div>
-        <div className="card-body">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Job Title</th>
-                <th scope="col">Applicant Name</th>
-                <th scope="col">Resume</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {resumes.map((resume) => (
-                <tr key={resume.id}>
-                  <th scope="row">{resume.id}</th>
-                  <td>{resume.jobTitle}</td>
-                  <td>{resume.applicantName}</td>
-                  <td>
-                    <a href={resume.resumeLink} className="btn btn-info btn-sm" target="_blank" rel="noopener noreferrer">
-                      View Resume
-                    </a>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleResumeDelete(resume.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="job-list">
+        {jobs.length > 0 ? (
+          jobs.map((job) => (
+            <div key={job.id} className="job-card">
+              <img src={job.image} alt={job.title} className="job-image" />
+              <h2>{job.title}</h2>
+              <h3>{job.company}</h3>
+              <p className="job-description">{job.description}</p>
+              <button
+                className="apply-btn"
+                onClick={() => handleRemoveJob(job.id)}
+              >
+                Remove Job
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>No jobs available at the moment.</p>
+        )}
       </div>
     </div>
   );
