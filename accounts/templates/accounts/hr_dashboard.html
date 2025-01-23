@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Dashboard</title>
+</head>
+<body>
+    <h1>HR Dashboard</h1>
+    <a href="{% url 'post_job' %}">Post a Job</a>
+    <a href="{% url 'logout' %}">Logout</a>
+    <h2>Your Jobs</h2>
+    <ul>
+        {% for job in jobs %}
+            <li>{{ job.title }} - {{ job.description }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Applications</h2>
+    <ul>
+        {% for application in applications %}
+            <li>{{ application.candidate.user.username }} applied for {{ application.job.title }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

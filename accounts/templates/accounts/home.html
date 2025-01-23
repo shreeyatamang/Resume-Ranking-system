@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <!-- Add any stylesheets or links to external CSS here -->
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Resume Ranking System</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'login_hr' %}">Login as HR</a></li>
+                <li><a href="{% url 'login_candidate' %}">Login as Candidate</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Welcome to the System</h2>
+        
+        
+
+        <section>
+            <h3>About the System</h3>
+            <p>This system helps HR professionals and candidates to manage and rank resumes efficiently.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Resume Ranking System</p>
+    </footer>
+</body>
+</html>
