@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ranked Resumes</title>
+</head>
+<body>
+    <h1>Ranked Resumes</h1>
+    <ul>
+        {% for resume, score in ranked_resumes %}
+            <li>{{ resume.name }} - Score: {{ score }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

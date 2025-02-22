@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Predict</title>
+</head>
+<body>
+    <h1>Make a Prediction</h1>
+    <form method="post" action="{% url 'predict' %}">
+        {% csrf_token %}
+        <label for="features">Features:</label>
+        <input type="text" id="features" name="features">
+        <button type="submit">Predict</button>
+    </form>
+</body>
+</html>

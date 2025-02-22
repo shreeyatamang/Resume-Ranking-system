@@ -1,43 +1,42 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     USER_TYPE_CHOICES = (
         ('HR', 'HR'),
         ('Candidate', 'Candidate'),
     )
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='Candidate')
+    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES)
 
 class HR(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)
-    
-    def __str__(self):
-        return self.user.username
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='hr')
+    organization_name = models.CharField(max_length=255)
+    organization_email = models.EmailField()
 
-class Candidate(models.Model):  
+class Candidate(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)
-    
-    def __str__(self):
-        return self.user.username
-    
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+
 class Job(models.Model):
-    hr = models.ForeignKey(HR, on_delete=models.CASCADE)
+    hr = models.ForeignKey('HR', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
+    location = models.CharField(max_length=255)
+    salary = models.DecimalField(max_digits=10, decimal_places=2)
 
 class Application(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    resume = models.FileField(upload_to='resumes/')
+    resume_file = models.FileField(upload_to='resumes/')
     applied_at = models.DateTimeField(auto_now_add=True)
+    rank = models.IntegerField(null=True, blank=True)  # Add the rank field
+    resume_content = models.TextField()  # Add this field
 
-    def __str__(self):
-        return f"{self.candidate.user.username} applied for {self.job.title}"
+class JobDescription(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    description = models.TextField()
+
+class Resume(models.Model):
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    resume_text = models.TextField()

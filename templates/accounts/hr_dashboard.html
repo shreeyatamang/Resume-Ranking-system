@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HR Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the HR Dashboard</h1>
+    <h2>Job Listings</h2>
+    {% for job, ranked_resumes in ranked_resumes %}
+        <h3>{{ job.title }}</h3>
+        <ul>
+            {% for resume, score in ranked_resumes %}
+                <li>{{ resume.candidate.user.username }} - Score: {{ score }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+    <h2>Post a New Job</h2>
+    <form method="post" action="{% url 'post_job' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Post Job</button>
+    </form>
+</body>
+</html>

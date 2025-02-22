@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Results for {{ job.title }}</h2>
+    <ul class="list-group">
+      {% for application in applications %}
+        <li class="list-group-item">
+          <h4>Rank: {{ application.rank }}</h4>
+          <p>{{ application.candidate.user.first_name }} {{ application.candidate.user.last_name }}</p>
+          <p>{{ application.resume_content }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

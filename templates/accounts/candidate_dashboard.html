@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Candidate Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the Candidate Dashboard</h1>
+    <h2>Your Resumes</h2>
+    <ul>
+        {% for resume in resumes %}
+            <li>{{ resume.title }}</li>
+        {% endfor %}
+    </ul>
+    <h2>Available Job Listings</h2>
+    <ul>
+        {% for job in jobs %}
+            <li>{{ job.title }} - {{ job.description }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

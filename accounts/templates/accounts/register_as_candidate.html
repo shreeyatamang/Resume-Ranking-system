@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register as Candidate</title>
+    <!-- Add any stylesheets or links to external CSS here -->
 </head>
 <body>
-    <h1>Register as Candidate</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <header>
+        <h1>Register as Candidate</h1>
+    </header>
+
+    <main>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Register</button>
+        </form>
+        <p>Already have an account? <a href="{% url 'candidate_login' %}">Login here</a></p>
+        <p><a href="javascript:history.back()">Back</a></p>
+    </main>
 </body>
 </html>

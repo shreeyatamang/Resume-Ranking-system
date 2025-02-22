@@ -1,23 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>HR Dashboard</title>
-</head>
-<body>
-    <h1>HR Dashboard</h1>
-    <a href="{% url 'post_job' %}">Post a Job</a>
-    <a href="{% url 'logout' %}">Logout</a>
-    <h2>Your Jobs</h2>
-    <ul>
-        {% for job in jobs %}
-            <li>{{ job.title }} - {{ job.description }}</li>
-        {% endfor %}
+<!-- filepath: /C:/Users/USER/Resume-Ranking-system/accounts/templates/accounts/hr_dashboard.html -->
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>HR Dashboard</h2>
+    <a href="{% url 'post_job' %}" class="btn btn-primary mb-3">Post a Job</a>
+    <h3>Jobs Posted</h3>
+    <ul class="list-group">
+      {% for job in jobs %}
+        <li class="list-group-item">
+          <h4>{{ job.title }}</h4>
+          <p>{{ job.description }}</p>
+          <a href="{% url 'view_results' job.id %}" class="btn btn-secondary">View Results</a>
+        </li>
+      {% endfor %}
     </ul>
-    <h2>Applications</h2>
-    <ul>
-        {% for application in applications %}
-            <li>{{ application.candidate.user.username }} applied for {{ application.job.title }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+  </div>
+{% endblock %}
+
+{% if not request.user.hr.organization_name or not request.user.hr.organization_email %}
+    <div class="alert alert-warning">
+        You need to complete your HR profile before posting a job. <a href="{% url 'complete_hr_profile' %}">Complete Profile</a>
+    </div>
+{% endif %}

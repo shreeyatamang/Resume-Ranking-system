@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Candidate Dashboard</title>
+</head>
+<body>
+    <h1>Available Jobs</h1>
+    <ul>
+        {% for job in jobs %}
+            <li>{{ job.title }} - {{ job.description }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

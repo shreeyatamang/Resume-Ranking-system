@@ -1,14 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Apply for {{ job.title }}</title>
-</head>
-<body>
-    <h1>Apply for {{ job.title }}</h1>
+
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Apply for {{ job.title }}</h2>
     <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Apply</button>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary">Apply</button>
     </form>
-</body>
-</html>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+{% endblock %}

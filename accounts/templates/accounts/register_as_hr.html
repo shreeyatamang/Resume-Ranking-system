@@ -1,14 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register as HR</title>
+    <!-- Add any stylesheets or links to external CSS here -->
 </head>
 <body>
-    <h1>Register as HR</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Register</button>
-    </form>
+    <header>
+        <h1>Register as HR</h1>
+    </header>
+
+    <main>
+        {% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Register as HR</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+  </form>
+  <p>Already have an account? <a href="{% url 'hr_login' %}">Login here</a></p>
+  <p><a href="javascript:history.back()">Back</a></p>
+{% endblock %}
+    </main>
 </body>
 </html>

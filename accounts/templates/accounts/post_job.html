@@ -1,14 +1,23 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Post a Job</title>
+    <!-- Add any stylesheets or links to external CSS here -->
 </head>
 <body>
-    <h1>Post a Job</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Post Job</button>
-    </form>
+    <header>
+        <h1>Post a Job</h1>
+    </header>
+
+    <main>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Post Job</button>
+        </form>
+    </main>
 </body>
 </html>
