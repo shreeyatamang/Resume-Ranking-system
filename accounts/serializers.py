@@ -63,3 +63,12 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid credentials")
 
         return {'email': user.email, 'role': 'HR' if isinstance(user, HR) else 'Candidate'}
+    
+    from rest_framework import serializers
+from .models import Job
+
+class JobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = ['id', 'title', 'company', 'description', 'image']
+

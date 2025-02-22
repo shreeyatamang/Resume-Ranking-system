@@ -41,3 +41,14 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.candidate.user.username} applied for {self.job.title}"
+    
+    from django.db import models
+
+class Job(models.Model):
+    title = models.CharField(max_length=255)
+    company = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.URLField()  # Assuming you are storing image URLs for the jobs
+
+    def __str__(self):
+        return self.title
