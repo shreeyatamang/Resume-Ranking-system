@@ -1,0 +1,56 @@
+/* Header.css */
+
+/* General header styles */
+header {
+  background-color: #f8f9fa; /* Light background color */
+  padding: 10px 20px; /* Padding around the header */
+  display: flex;
+  justify-content: space-between; /* Space out the brand and navigation links */
+  align-items: center; /* Vertically align the content */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.brand-name {
+  font-size: 24px; /* Font size for the brand name */
+  font-weight: bold; /* Make brand name bold */
+  color: #333; /* Dark text color */
+  text-decoration: none; /* Remove underline from the brand link */
+  font-family: 'Arial', sans-serif; /* Font family */
+  font-style: normal;
+}
+
+/* Navigation styles */
+nav {
+  display: flex;
+}
+
+.nav-links {
+  list-style: none; /* Remove bullet points from the list */
+  display: flex; /* Display the list items in a row */
+  gap: 20px; /* Add space between the list items */
+}
+
+.nav-links a {
+  color: #555; /* Text color for the navigation links */
+  text-decoration: none; /* Remove underline */
+  font-size: 16px; /* Font size for the navigation links */
+  font-family: 'Arial', sans-serif; /* Font family */
+  transition: color 0.3s ease; /* Smooth transition on hover */
+}
+
+.nav-links a:hover {
+  color: #007bff; /* Change color on hover */
+}
+
+@media (max-width: 768px) {
+  /* For smaller screens, stack the brand name and navigation items */
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
