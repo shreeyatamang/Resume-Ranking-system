@@ -1,7 +1,16 @@
 from rest_framework import serializers
 from .models import HR, Candidate
-
 from django.contrib.auth.hashers import make_password, check_password
+
+class HRSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HR
+        fields = '__all__'
+
+class CandidateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Candidate
+        fields = '__all__'
 
 # HR Registration Serializer
 class HRRegistrationSerializer(serializers.Serializer):

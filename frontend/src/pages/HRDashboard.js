@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "./HRDashboard.css";
-
 
 function HRDashboard() {
   const [jobs, setJobs] = useState([]);
@@ -90,6 +90,7 @@ function HRDashboard() {
               <h2>{job.title}</h2>
               <h3>{job.company}</h3>
               <p className="job-description">{job.description}</p>
+              <Link to={`/view-results/${job.id}`} className="view-results-link">View Results</Link> {/* Add View Results link */}
               <button
                 className="apply-btn"
                 onClick={() => handleRemoveJob(job.id)}

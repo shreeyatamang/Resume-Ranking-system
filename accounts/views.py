@@ -1,22 +1,81 @@
 import os
 import nltk
 import logging
+import pandas as pd
+import numpy as np
+import re
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views import View
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import json
 from .models import CustomUser, HR, Candidate, Job, Application
 from .forms import HRForm, CandidateForm, JobForm, ApplicationForm
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from .app import preprocess_text, rank_resumes
 
+# Downloading NLTK resources
 nltk.download('punkt')
 nltk.download('stopwords')
 
 logger = logging.getLogger(__name__)
+
+# Loading the dataset
+file_path = "accounts/FinalCleanedResumeDataSet.csv"
+df = pd.read_csv(file_path)
+
+# Function to preprocess text
+def preprocess_text(text):
+    text = text.lower()
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+    tokens = nltk.word_tokenize(text)
+    tokens = [word for word in tokens if word not in stopwords.words('english')]
+    return ' '.join(tokens)
+
+def rank_resumes(resume_texts, job_description):
+    all_texts = [job_description] + resume_texts
+    vectorizer = TfidfVectorizer()
+    tfidf_matrix = vectorizer.fit_transform(all_texts)
+    similarities = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:])
+    return np.argsort(similarities[0])[::-1]  # Sort resumes by relevance
+
+def calculate_rank(job_desc, resumes):
+    processed_resumes = [preprocess_text(resume) for resume in resumes]
+    ranked_indices = rank_resumes(processed_resumes, job_desc)
+    
+    # Debugging: Print the ranked indices
+    print("Ranked indices:", ranked_indices)
+    
+    ranked_resumes = [{"rank": i+1, "resume": resumes[idx]} for i, idx in enumerate(ranked_indices)]
+    
+    # Debugging: Print the ranked resumes
+    print("Ranked resumes:", ranked_resumes)
+    
+    return ranked_resumes
+
+@csrf_exempt
+def rank(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        job_desc = data.get('job_desc', '')
+        resumes = data.get('resumes', [])
+
+        if not job_desc or not resumes:
+            return JsonResponse({'error': 'Missing job description or resumes'}, status=400)
+
+        ranked_resumes = calculate_rank(job_desc, resumes)
+        
+        # Debugging: Print the final response
+        print("Final response:", {'ranked_resumes': ranked_resumes})
+        
+        return JsonResponse({'ranked_resumes': ranked_resumes})
+    else:
+        return JsonResponse({'error': 'GET method not allowed'}, status=405)
 
 def home(request):
     return render(request, 'accounts/home.html')
@@ -69,6 +128,8 @@ class CandidateRegistrationView(View):
             login(request, user)  # Log the user in after registration
             return redirect('candidate_dashboard')  # Redirect to Candidate dashboard
         return render(request, 'accounts/register_as_candidate.html', {'form': form})
+
+
 
 def hr_login(request):
     if request.method == "POST":

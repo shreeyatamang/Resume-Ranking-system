@@ -1,55 +1,76 @@
-// src/pages/CandidateLogin.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate for redirecting after login
-import './LoginForm.css';
 
-function CandidateLogin({ onClose }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();  // Initialize the useNavigate hook
+const CandidateDashboard = () => {
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [pdfFile, setPdfFile] = useState(null);
+  const [userName, setUserName] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const jobs = [
+    { id: '1740269933066', title: 'Software Engineer' },
+    { id: '1740231258707', title: 'Data Scientist' },
+  ];
 
-    // Here, you can add your logic to validate the email and password with the backend API.
-    // For now, we'll assume the login is successful.
+  const handleSubmitApplication = () => {
+    if (pdfFile && userName) {
+      // Store resume information in localStorage
+      const savedResumes = JSON.parse(localStorage.getItem("resumes")) || [];
+      const newResume = { user_name: userName, job_id: selectedJob.id };
+      savedResumes.push(newResume);
+      localStorage.setItem("resumes", JSON.stringify(savedResumes));
 
-    // Redirect to candidate dashboard after login
-    navigate('/candidate-dashboard');
+      // Store only names separately
+      const candidateNames = JSON.parse(localStorage.getItem("candidate_names")) || {};
+      if (!candidateNames[selectedJob.id]) {
+        candidateNames[selectedJob.id] = [];
+      }
+      candidateNames[selectedJob.id].push(userName);
+      localStorage.setItem("candidate_names", JSON.stringify(candidateNames));
+
+      setShowModal(false);
+      setPdfFile(null);
+      setUserName('');
+      alert("Application submitted successfully!");
+    } else {
+      alert("Please enter your name and select a PDF file.");
+    }
   };
 
   return (
-    <div className="login-form-container">
-      <h2 className="login-title">Login as Candidate</h2>
-      <form className="login-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Email:</label>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+    <div>
+      <h1>Candidate Dashboard</h1>
+      <h2>Available Jobs</h2>
+      <ul>
+        {jobs.map((job) => (
+          <li key={job.id}>
+            <strong>{job.title}</strong> 
+            <button onClick={() => { setSelectedJob(job); setShowModal(true); }}>
+              Apply
+            </button>
+          </li>
+        ))}
+      </ul>
 
-        <div className="form-group">
-          <label>Password:</label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+      {showModal && (
+        <div className="modal">
+          <h2>Apply for {selectedJob?.title}</h2>
+          <input 
+            type="text" 
+            placeholder="Enter your name" 
+            value={userName} 
+            onChange={(e) => setUserName(e.target.value)} 
           />
+          <input 
+            type="file" 
+            accept=".pdf" 
+            onChange={(e) => setPdfFile(e.target.files[0])} 
+          />
+          <button onClick={handleSubmitApplication}>Submit</button>
+          <button onClick={() => setShowModal(false)}>Cancel</button>
         </div>
-
-        <button type="submit" className="submit-btn">Login</button>
-      </form>
-      <button className="close-btn" onClick={onClose}>Close</button>
+      )}
     </div>
   );
-}
+};
 
-export default CandidateLogin;
+export default CandidateDashboard;

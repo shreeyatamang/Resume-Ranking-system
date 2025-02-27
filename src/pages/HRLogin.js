@@ -1,31 +1,32 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
-import './LoginForm.css'; // Assuming the CSS file is in the same directory
+import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../utils/api'; // Import the loginUser function
+import './LoginForm.css';
 
 const HRLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Initialize the navigate hook
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     
-    // Check if the username contains '@' (for email validation)
-    if (username.includes('@') && password) {
-      // After successful login, redirect to the HR Dashboard
-      navigate('/hr-dashboard');
-    } else {
-      // Handle failed login (e.g., show error message)
-      alert('Invalid username or password');
+    try {
+      const response = await loginUser({ username, password });
+      if (response.success) {
+        navigate('/hr-dashboard');
+      } else {
+        alert('Invalid username or password');
+      }
+    } catch (error) {
+      alert('Error logging in. Please try again.');
     }
     
-    // Reset the form after submission
     setUsername('');
     setPassword('');
   };
 
   const handleClose = () => {
-    // Handle close (e.g., redirect to home page)
     navigate('/');
   };
 

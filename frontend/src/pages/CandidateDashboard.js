@@ -6,6 +6,7 @@ function CandidateDashboard() {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [pdfFile, setPdfFile] = useState(null);
+  const [userName, setUserName] = useState('');
 
   useEffect(() => {
     // Load jobs from localStorage
@@ -23,15 +24,23 @@ function CandidateDashboard() {
   };
 
   const handleSubmitApplication = () => {
-    if (pdfFile) {
-      // You can handle file upload logic here (e.g., send to a server)
-      console.log(`Applying for ${selectedJob.title} with file:`, pdfFile);
+    if (pdfFile && userName) {
+      // Save the resume to localStorage
+      const savedResumes = JSON.parse(localStorage.getItem("resumes")) || [];
+      const newResume = {
+        user_name: userName,
+        resume_content: pdfFile.name, // Assuming the file name as resume content for simplicity
+        job_id: selectedJob.id,
+      };
+      savedResumes.push(newResume);
+      localStorage.setItem("resumes", JSON.stringify(savedResumes));
 
       // Close modal after submission
       setShowModal(false);
       setPdfFile(null); // Reset file input
+      setUserName(''); // Reset user name input
     } else {
-      alert("Please select a PDF file.");
+      alert("Please enter your name and select a PDF file.");
     }
   };
 
@@ -60,6 +69,13 @@ function CandidateDashboard() {
         <div className="modal">
           <div className="modal-content">
             <h2>Apply for {selectedJob.title}</h2>
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              required
+            />
             <input
               type="file"
               accept=".pdf"

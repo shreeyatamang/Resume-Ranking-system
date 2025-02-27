@@ -73,13 +73,26 @@ LOGGING = {
 }
 
 INSTALLED_APPS = [
-    ...,
-    "corsheaders",
+    # ...existing apps...
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
+    # ...existing apps...
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
-    ...
+    # ...existing middleware...
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',  # Comment this line for testing
+    # ...existing middleware...
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Add your frontend URL here
+]
+
+# settings.py
+DEBUG = True
 
 
