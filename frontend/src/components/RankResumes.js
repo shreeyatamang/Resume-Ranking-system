@@ -1,15 +1,17 @@
+
+
 import React, { useState } from 'react';
 import { rankResumes } from '../apiService';
 
 const RankResumes = () => {
-  const [candidateId, setCandidateId] = useState('');
+  const [jobDesc, setJobDesc] = useState('');
+  const [resumes, setResumes] = useState([]);
   const [rankedResumes, setRankedResumes] = useState([]);
 
   const handleRankResumes = async () => {
     try {
-      const response = await rankResumes(candidateId);
-      setRankedResumes(response.ranked_resumes);
-      console.log('Ranked resumes:', response.ranked_resumes);
+      const response = await rankResumes(jobDesc, resumes);
+      setRankedResumes(response.data.ranked_resumes);
     } catch (error) {
       console.error('Error ranking resumes:', error);
     }
@@ -18,21 +20,25 @@ const RankResumes = () => {
   return (
     <div>
       <h2>Rank Resumes</h2>
-      <input
-        type="text"
-        placeholder="Candidate ID"
-        value={candidateId}
-        onChange={(e) => setCandidateId(e.target.value)}
+      <textarea
+        value={jobDesc}
+        onChange={(e) => setJobDesc(e.target.value)}
+        placeholder="Enter job description"
+      />
+      <textarea
+        value={resumes.join('\n')}
+        onChange={(e) => setResumes(e.target.value.split('\n'))}
+        placeholder="Enter resumes, one per line"
       />
       <button onClick={handleRankResumes}>Rank Resumes</button>
-      <div>
-        <h3>Ranked Resumes</h3>
-        <ul>
-          {rankedResumes.map((resume, index) => (
-            <li key={index}>{resume}</li>
-          ))}
-        </ul>
-      </div>
+      <ul>
+        {rankedResumes.map((resume, index) => (
+          <li key={index}>
+            <h4>Rank: {resume.rank}</h4>
+            <p>{resume.resume}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -1,14 +1,14 @@
+
+
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000'; // Your backend URL
+const api = axios.create({
+  baseURL: 'http://127.0.0.1:8000/api/', 
+});
 
-export const rankResumes = async (candidateId) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/api/rank_resumes/`, { candidate_id: candidateId });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+export const rankResumes = (jobDesc, resumes) => {
+  return api.post('rank/', {
+    job_desc: jobDesc,
+    resumes: resumes,
+  });
 };
-
-// Add other API functions as needed
